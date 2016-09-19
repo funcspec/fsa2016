@@ -12,6 +12,13 @@ you whether you want to work on the lab exercises alone or in
 pairs. If you choose to work in pairs you should still make
 sure you acquire individual skills.
 
+*Note*: You can now also read the repositories of all other
+students. This is to facilitate the discussion among each
+other and to allow you to look at different solutions for
+the past homework.
+Of course we still expect you to solve the problems on
+your own and not to copy code from someone else.
+
 ## Useful Links
 
 - If you still have trouble installing Haskell, you can also
