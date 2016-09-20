@@ -46,10 +46,12 @@ testR :: Int -> Int -> ([Int] -> [Int])
 testR k n f r = if k == n then print (show n ++ " tests passed")
                 else do
                   xs <- genIntList
-                  if r xs (f xs) then
-                    do print ("pass on: " ++ show xs)
-                       testR (k+1) n f r
-                  else error ("failed test on: " ++ show xs)
+                  if r xs (f xs)
+                    then do
+                      print ("pass on: " ++ show xs)
+                      testR (k+1) n f r
+                    else
+                      error ("failed test on: " ++ show xs)
 
 testPost :: ([Int] -> [Int]) -> ([Int] -> Bool) -> IO ()
 testPost f p = testR 1 100 f (\_ -> p)

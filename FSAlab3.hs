@@ -34,16 +34,18 @@ showRow [a1,a2,a3,a4,a5,a6,a7,a8,a9] =
      putStr (showVal a8) ; putChar ' '
      putStr (showVal a9) ; putChar ' '
      putChar '|'         ; putChar '\n'
+showRow _ = error "invalid row"
 
 showGrid :: Grid -> IO()
 showGrid [as,bs,cs,ds,es,fs,gs,hs,is] =
- do putStrLn ("+-------+-------+-------+")
+ do putStrLn "+-------+-------+-------+"
     showRow as; showRow bs; showRow cs
-    putStrLn ("+-------+-------+-------+")
+    putStrLn "+-------+-------+-------+"
     showRow ds; showRow es; showRow fs
-    putStrLn ("+-------+-------+-------+")
+    putStrLn "+-------+-------+-------+"
     showRow gs; showRow hs; showRow is
-    putStrLn ("+-------+-------+-------+")
+    putStrLn "+-------+-------+-------+"
+showGrid _ = error "invalid grid"
 
 type Sudoku = (Row,Column) -> Value
 
@@ -55,7 +57,7 @@ grid2sud :: Grid -> Sudoku
 grid2sud gr = \ (r,c) -> pos gr (r,c)
   where
   pos :: [[a]] -> (Row,Column) -> a
-  pos gr (r,c) = (gr !! (r-1)) !! (c-1)
+  pos grid (r,c) = (grid !! (r-1)) !! (c-1)
 
 showSudoku :: Sudoku -> IO()
 showSudoku = showGrid . sud2grid
@@ -68,7 +70,7 @@ subGrid s (r,c) =
   [ s (r',c') | r' <- bl r, c' <- bl c ]
 
 freeInSeq :: [Value] -> [Value]
-freeInSeq seq = values \\ seq
+freeInSeq sequ = values \\ sequ
 
 freeInRow :: Sudoku -> Row -> [Value]
 freeInRow s r =
@@ -83,9 +85,9 @@ freeInSubgrid s (r,c) = freeInSeq (subGrid s (r,c))
 
 freeAtPos :: Sudoku -> (Row,Column) -> [Value]
 freeAtPos s (r,c) =
-  (freeInRow s r)
-   `intersect` (freeInColumn s c)
-   `intersect` (freeInSubgrid s (r,c))
+  freeInRow s r
+   `intersect` freeInColumn s c
+   `intersect` freeInSubgrid s (r,c)
 
 injective :: Eq a => [a] -> Bool
 injective xs = nub xs == xs
@@ -128,10 +130,10 @@ solved  :: Node -> Bool
 solved = null . snd
 
 extendNode :: Node -> Constraint -> [Node]
-extendNode (s,constraints) (r,c,vs) =
+extendNode (s,constr) (r,c,vs) =
    [(extend s ((r,c),v),
      sortBy length3rd $
-         prune (r,c,v) constraints) | v <- vs ]
+         prune (r,c,v) constr) | v <- vs ]
 
 length3rd :: (a,b,[c]) -> (a,b,[c]) -> Ordering
 length3rd (_,_,zs) (_,_,zs') = compare (length zs) (length zs')
@@ -166,16 +168,16 @@ constraints s = sortBy length3rd
 
 search :: (node -> [node])
        -> (node -> Bool) -> [node] -> [node]
-search children goal [] = []
+search _        _    [] = []
 search children goal (x:xs)
   | goal x    = x : search children goal xs
-  | otherwise = search children goal ((children x) ++ xs)
+  | otherwise = search children goal (children x ++ xs)
 
 solveNs :: [Node] -> [Node]
 solveNs = search succNode solved
 
 succNode :: Node -> [Node]
-succNode (s,[]) = []
+succNode (_,[]) = []
 succNode (s,p:ps) = extendNode (s,ps) p
 
 solveAndShow :: Grid -> IO[()]
@@ -240,7 +242,7 @@ example5 = [[1,0,0,0,0,0,0,0,0],
             [0,0,0,0,0,0,0,0,9]]
 
 emptyN :: Node
-emptyN = (\ _ -> 0,constraints (\ _ -> 0))
+emptyN = (const 0,constraints (const 0))
 
 getRandomInt :: Int -> IO Int
 getRandomInt n = getStdRandom (randomR (0,n))
@@ -278,32 +280,33 @@ rsolveNs ns = rsearch rsuccNode solved (return ns)
 
 rsearch :: (node -> IO [node])
             -> (node -> Bool) -> IO [node] -> IO [node]
-rsearch succ goal ionodes =
+rsearch suc goal ionodes =
   do xs <- ionodes
      if null xs
        then return []
        else
          if goal (head xs)
            then return [head xs]
-           else do ys <- rsearch succ goal (succ (head xs))
+           else do ys <- rsearch suc goal (suc (head xs))
                    if (not . null) ys
                       then return [head ys]
                       else if null (tail xs) then return []
                            else
                              rsearch
-                               succ goal (return $ tail xs)
+                               suc goal (return $ tail xs)
 
 genRandomSudoku :: IO Node
 genRandomSudoku = do [r] <- rsolveNs [emptyN]
                      return r
 
+randomS :: IO ()
 randomS = genRandomSudoku >>= showNode
 
 uniqueSol :: Node -> Bool
 uniqueSol node = singleton (solveNs [node]) where
-  singleton [] = False
-  singleton [x] = True
-  singleton (x:y:zs) = False
+  singleton []      = False
+  singleton [_]     = True
+  singleton (_:_:_) = False
 
 eraseS :: Sudoku -> (Row,Column) -> Sudoku
 eraseS s (r,c) (x,y) | (r,c) == (x,y) = 0
