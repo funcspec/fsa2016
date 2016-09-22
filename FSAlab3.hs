@@ -23,7 +23,7 @@ showRow :: [Value] -> IO()
 showRow [a1,a2,a3,a4,a5,a6,a7,a8,a9] = putStrLn . concat $
    [ "| ", showVal a1, " ", showVal a2, " ", showVal a3, " "
    , "| ", showVal a4, " ", showVal a5, " ", showVal a6, " "
-   , "| ", showVal a7, " ", showVal a8, " ", showVal a9, "\n" ]
+   , "| ", showVal a7, " ", showVal a8, " ", showVal a9, " |" ]
 showRow _ = error "invalid row"
 
 showGrid :: Grid -> IO()
