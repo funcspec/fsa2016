@@ -99,7 +99,8 @@ definitions to get you started.
 
 > data Boy = Matthew | Peter | Jack | Arnold | Carl
 >            deriving (Eq, Show)
->
+
+> boys :: [Boy]
 > boys = [Matthew, Peter, Jack, Arnold, Carl]
 
 You should first define a function
