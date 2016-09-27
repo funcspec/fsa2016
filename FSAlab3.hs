@@ -44,10 +44,9 @@ sud2grid s =
   [ [ s (r,c) | c <- [1..9] ] | r <- [1..9] ]
 
 grid2sud :: Grid -> Sudoku
-grid2sud gr = \ (r,c) -> pos gr (r,c)
-  where
-  pos :: [[a]] -> (Row,Column) -> a
-  pos grid (r,c) = (grid !! (r-1)) !! (c-1)
+grid2sud gr = \ (r,c) -> pos (r,c) where
+  pos :: (Row,Column) -> Value
+  pos (r,c) = (gr !! (r-1)) !! (c-1)
 
 showSudoku :: Sudoku -> IO()
 showSudoku = showGrid . sud2grid
@@ -294,9 +293,7 @@ randomS = genRandomSudoku >>= showNode
 
 uniqueSol :: Node -> Bool
 uniqueSol node = singleton (solveNs [node]) where
-  singleton []      = False
-  singleton [_]     = True
-  singleton (_:_:_) = False
+  singleton = (==1) . length
 
 eraseS :: Sudoku -> (Row,Column) -> Sudoku
 eraseS s (r,c) (x,y) | (r,c) == (x,y) = 0
