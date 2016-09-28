@@ -12,12 +12,27 @@ you whether you want to work on the lab exercises alone or in
 pairs. If you choose to work in pairs you should still make
 sure you acquire individual skills.
 
-*Note*: You can now also read the repositories of all other
+## Private Repositories
+
+~~*Note*: You can also read the repositories of all other
 students. This is to facilitate the discussion among each
 other and to allow you to look at different solutions for
 the past homework.
 Of course we still expect you to solve the problems on
-your own and not to copy code from someone else.
+your own and not to copy code from someone else.~~
+
+*New Note*: Repositories are now again only visible for the
+respective team members. This is because they will also contain
+your grades and to prevent you from getting too lazy and
+stealing too much from others.
+You can still ask other people how they are implementing the
+current exercises of course. But it should be up to each of
+you how much you want to share or work on your own.
+
+If now we see something great in somebody's homework and want
+to show it to others we will copy the relevant parts into this
+repository here or include it in the Friday notes.
+
 
 ## Useful Links
 
