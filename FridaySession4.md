@@ -1,8 +1,6 @@
 Notes from the session on Friday, 2016-09-30
 ============================================
 
-> module FridaySession4 where
-
 
 Practical Hints
 ---------------
