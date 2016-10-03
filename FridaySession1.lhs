@@ -1,7 +1,6 @@
 == Friday Session  2015-09-09
 
 > module FridaySession1 where
-> import Test.QuickCheck
 
 ==
 
@@ -23,12 +22,12 @@ E.g. you are investigating `map` and `takeWhile`:
      *FridaySession1> takeWhile (\n -> even n && n < 10) [0..]
      [0]
      *FridaySession1> takeWhile (\n -> even n && n < 10) (map (*2) [0..]
-     
+
      <interactive>:18:51:
          parse error (possibly incorrect indentation or mismatched brackets)
      *FridaySession1> takeWhile (\n -> even n && n < 10) (map (*2) [0..])
      [0,2,4,6,8]
-     
+
 And so on
 
 ==
@@ -38,7 +37,7 @@ Using **github** and **git**
 You can use the *github* interface and paste your homework
 direcly into your repository.
 
-But it is much more convenient to use `git`. 
+But it is much more convenient to use `git`.
 
 The most important git commands are
 
@@ -61,7 +60,7 @@ Here is a [guide to the tutorials](https://help.github.com/articles/good-resourc
 
 About **stack**
 
-The simplest way to use *stack* is this: 
+The simplest way to use *stack* is this:
 
      stack exec ghci FridaySession1.lhs
 
@@ -99,7 +98,9 @@ This also works for functions:
 **Using QuickCheck for system investigation**
 
 See this
-[introduction to QuickCheck testing](https://www.schoolofhaskell.com/user/pbv/an-introduction-to-quickcheck-testing). 
+[introduction to QuickCheck testing](https://www.schoolofhaskell.com/user/pbv/an-introduction-to-quickcheck-testing).
+
+     import Test.QuickCheck
 
 Example: find out the difference between `mod` and `rem`
 
@@ -107,11 +108,11 @@ Example: find out the difference between `mod` and `rem`
 
 This gives exceptions, because of a division by 0 error. Change this to:
 
-     quickCheckResult (\ m n -> n /= 0 ==> rem m n == mod m n) 
+     quickCheckResult (\ m n -> n /= 0 ==> rem m n == mod m n)
 
 This gives:
 
-     *** Failed! Falsifiable (after 9 tests and 5 shrinks):    
+     *** Failed! Falsifiable (after 9 tests and 5 shrinks):
      -1
      2
 
@@ -196,8 +197,8 @@ Here are two tools to clean up your code:
 
 Example:
 
-> bad_left_even :: (Int,Int) -> Bool
-> bad_left_even (n,m) = (even n)
+    bad_left_even :: (Int,Int) -> Bool
+    bad_left_even (n,m) = (even n)
 
 *hlint* says:
 
@@ -206,15 +207,15 @@ Example:
        bad_left_even (n, m) = ...
      Why not:
        badLeftEven (n, m) = ...
-     
+
      FridaySession1.lhs:144:25: Suggestion: Redundant bracket
      Found:
        (even n)
      Why not:
        even n
-     
+
      2 hints
-     
+
 
 **ghci -Wall** says:
 

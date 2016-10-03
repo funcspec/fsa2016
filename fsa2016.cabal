@@ -12,6 +12,9 @@ library
                     FSAlab1
                     FSAlab2
                     FSAlab3
+                    FSAlab4
+                    FridaySession1
+                    FridaySession2
                     FridaySession3
   build-depends:    base >= 4.7 && < 5,
                     arithmoi,

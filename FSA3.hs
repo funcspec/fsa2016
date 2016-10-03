@@ -6,29 +6,36 @@ import FSA2 (while,whiler)
 fp :: Eq a => (a -> a) -> a -> a
 fp f = until (\ x -> x == f x) f
 
+fbo :: (Num a, Eq a) => a -> (a, a, a)
 fbo n = fibo (0,1,n) where
      fibo = fp (\ (x,y,k) -> if k == 0 then (x,y,k)
                              else (y,x+y,k-1))
 
-bab a = \ x -> ((x + a/x)/2)
+bab :: Fractional a => a -> a -> a
+bab a x = (x + a/x) / 2
 
+sr :: (Fractional a, Eq a) => a -> a
 sr a = fp (bab a) a
 
 iterateFix :: Eq a => (a -> a) -> a -> [a]
 iterateFix f = apprx . iterate f where
   apprx (x:y:zs) = if x == y then [x] else x: apprx (y:zs)
+  apprx _ = error "The impossible happened."
 
 fix :: (a -> a) -> a
 fix f = f (fix f)
 
+fbx :: (Num t1, Num t, Eq t1) => t1 -> (t, t, t1)
 fbx n = fibo (0,1,n) where
     fibo = fix (\ f (x,y,k) -> if k == 0 then (x,y,k)
                                else f (y,x+y,k-1))
 
-fbb n = fbbb (0,1,n) where
+fbb :: (Num t1, Num t, Eq t1) => t1 -> t
+fbb k = fbbb (0,1,k) where
   fbbb (x,y,n) = if n == 0 then x else fbbb (y,x+y,n-1)
 
-fbc n = fbbc 0 1 n where
+fbc :: Integer -> Integer
+fbc = fbbc 0 1 where
   fbbc x y n = if n == 0 then x else fbbc y (x+y) (n-1)
 
 fp' :: Eq a => (a -> a) -> a -> a
@@ -41,8 +48,9 @@ while' :: (a -> Bool) -> (a -> a) -> a -> a
 while' p f = fix (\ g x -> if not (p x) then x else g (f x))
 
 apprFact :: (Integer -> Integer) -> Integer -> Integer
-apprFact = \ f n -> if n == 0 then 1 else n * f (n-1)
+apprFact f n = if n == 0 then 1 else n * f (n-1)
 
+fact :: Integer -> Integer
 fact = fix apprFact
 
 pre :: (a -> Bool) -> (a -> b) -> a -> b
@@ -56,7 +64,7 @@ decomp n = decmp (0,n) where
   decmp = until (odd.snd) (\ (m,k) -> (m+1,div k 2))
 
 decompPost :: Integer -> (Integer,Integer)
-decompPost = \n -> post (\ (m,k) -> 2^m * k == n) decomp n
+decompPost n = post (\ (m,k) -> 2^m * k == n) decomp n
 
 assert :: (a -> b -> Bool) -> (a -> b) -> a -> b
 assert p f x = if p x (f x) then f x else error "assert"
@@ -75,16 +83,20 @@ invar p f x =
   in
    if p x && not (p x') then error "invar" else x'
 
+succI :: Integer -> Integer
 succI = invar (>0) succ
 
+predI :: Integer -> Integer
 predI = invar (<0) pred
 
+largestOddFactor :: Integer -> Integer
 largestOddFactor =  while even (invar (>0) (`div` 2))
 
+predI' :: Integer -> Integer
 predI' = invar (>0) pred
 
 ext_gcd :: Integer -> Integer -> (Integer,Integer)
-ext_gcd a b = ext_gcd' (a,b,0,1,1,0) where
+ext_gcd a0 b0 = ext_gcd' (a0,b0,0,1,1,0) where
     ext_gcd' = whiler
                  (\ (_,b,_,_,_,_) ->  b /= 0)
                  (\ (a,b,x,y,lastx,lasty) -> let
@@ -97,10 +109,12 @@ ext_gcd a b = ext_gcd' (a,b,0,1,1,0) where
 bezout :: Integer -> Integer -> (Integer,Integer) -> Bool
 bezout m n (x,y) = x*m + y*n == euclid m n
 
+euclid :: (Ord b, Num b) => b -> b -> b
 euclid m n = fst $ eucl (m,n) where
      eucl = until (uncurry  (==))
          (\ (x,y) -> if x > y then (x-y,x) else (x,y-x))
 
+ext_gcdA :: Integer -> Integer -> (Integer, Integer)
 ext_gcdA = assert2 bezout ext_gcd
 
 assert2 ::  (a -> b -> c -> Bool)
@@ -119,4 +133,5 @@ fct_gcd a b =
        (s,t) = fct_gcd b r
      in (t, s - q*t)
 
+fct_gcdA :: Integer -> Integer -> (Integer, Integer)
 fct_gcdA = assert2 bezout fct_gcd
