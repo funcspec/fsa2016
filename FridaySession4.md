@@ -16,6 +16,9 @@ Practical Hints
   and [here](https://github.com/m4lvin/mchlpe/blob/master/QALogic.lhs#L12) for examples
   and [here for a whole chapter on modules](http://learnyouahaskell.com/modules).
 
+- Malvin made publicity for the [Atom editor](https://atom.io/).
+  Works on any of OS X, Windows, Linux, and has great support for Haskell
+  software development. 
 
 Comments on Lab 3
 -----------------
@@ -25,6 +28,10 @@ Comments on Lab 3
 
 - Counting Sudokus: We discussed different ideas from Stefania and Eric
   but it does not seem straightforward.
+
+- A good source on the mathematics of sudoku is [this wikipedia entry](https://en.wikipedia.org/wiki/Mathematics_of_Sudoku).
+
+
 
 Stable Roommates Problem on Wikipedia
 -------------------------------------
@@ -38,4 +45,6 @@ The numbers are grayed out now as well:
 Epistemic Model Checking
 ------------------------
 
-- to be added
+- Jan gave a quick intro based on [a course at Tsinghua university
+in 2015](http://homepages.cwi.nl/~jve/courses/15/tsinghua/DEMO.pdf).
+The code that goes with these slides is in [DEMO.hs](http://homepages.cwi.nl/~jve/courses/15/tsinghua/DEMO.hs).
