@@ -101,12 +101,12 @@ exM = expM -- to be replaced by a fast version
 
 primeTestF :: Integer -> IO Bool
 primeTestF n = do
-   a <- randomRIO (1, n-1) :: IO Integer
+   a <- randomRIO (2, n-1) :: IO Integer
    return (exM a (n-1) n == 1)
 
 primeTestsF :: Int -> Integer -> IO Bool
 primeTestsF k n = do
- as <- sequence $ fmap (\_-> randomRIO (1,n-1)) [1..k]
+ as <- sequence $ fmap (\_-> randomRIO (2,n-1)) [1..k]
  return (all (\ a -> exM a (n-1) n == 1) as)
 
 decomp :: Integer -> (Integer,Integer)
