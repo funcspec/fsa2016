@@ -1,6 +1,6 @@
 module FSAlab5 where
-import Data.List
-import System.Random
+-- import Data.List
+-- import System.Random
 import FSA5
 
 carmichael :: [Integer]
